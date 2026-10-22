@@ -36,6 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "caption_stream_helper.cpp"
 #include "CaptionPluginManager.h"
 #include "ui/CaptionDock.h"
+#include "ui/NotesDock.h"
 
 #include "log.h"
 #include <algorithm>
@@ -48,6 +49,7 @@ MainCaptionWidget *main_caption_widget = nullptr;
 CaptionPluginManager *plugin_manager = nullptr;
 
 CaptionDock *caption_dock = nullptr;
+NotesDock *notes_dock = nullptr;
 bool frontend_loading_finished = false;
 bool ui_setup_done = false;
 
@@ -137,6 +139,10 @@ void setup_dock() {
     caption_dock->setObjectName("cloud_caption_caption_dock");
 
     obs_frontend_add_dock_by_id("cloud_closed_captions_dock_main", "Captions", caption_dock);
+
+    notes_dock = new NotesDock(*plugin_manager);
+    notes_dock->setObjectName("cloud_caption_notes_dock");
+    obs_frontend_add_dock_by_id("cloud_closed_captions_dock_notes", "Notas IA (Markdown)", notes_dock);
 }
 
 void setup_UI() {

@@ -77,6 +77,8 @@ set(obs_google_caption_plugin_SOURCES
         src/CaptionPluginManager.cpp
         src/ui/CaptionDock.cpp
         src/ui/OpenCaptionSettingsWidget.cpp
+        src/ui/NotesDock.cpp
+        src/notes/MarkdownNotesEngine.cpp
         )
 
 set(obs_google_caption_plugin_HEADERS
@@ -91,6 +93,8 @@ set(obs_google_caption_plugin_HEADERS
         src/CaptionPluginManager.h
         src/ui/CaptionDock.h
         src/ui/OpenCaptionSettingsWidget.h
+        src/ui/NotesDock.h
+        src/notes/MarkdownNotesEngine.h
         )
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -99,16 +103,16 @@ set(CMAKE_AUTOUIC ON)
 
 set(obs_QRC src/resources/obs.qrc)
 
-find_package(Qt6 COMPONENTS Widgets Core)
+find_package(Qt6 COMPONENTS Widgets Core Network)
 IF (Qt6_FOUND)
     message("using Qt6: ${Qt6_DIR}")
     qt_add_resources(obs_QRC_SOURCES ${obs_QRC})
-    set(_qt_widgets Qt6::Widgets)
+    set(_qt_widgets Qt6::Widgets Qt6::Network)
 elseif ()
-    find_package(Qt5 REQUIRED COMPONENTS Widgets Core)
+    find_package(Qt5 REQUIRED COMPONENTS Widgets Core Network)
     message("using Qt5: ${Qt5_DIR}")
     qt5_add_resources(obs_QRC_SOURCES ${obs_QRC})
-    set(_qt_widgets Qt5::Widgets)
+    set(_qt_widgets Qt5::Widgets Qt5::Network)
 ENDIF ()
 
 add_library(obs_google_caption_plugin MODULE

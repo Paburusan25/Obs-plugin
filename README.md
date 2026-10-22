@@ -3,6 +3,31 @@
 Provides closed captioning via Google Cloud Speech Recognition API as a standalone OBS plugin, no other tools required. 
 It's fully optional to viewers and uses Twitch's built in caption support which works on livestreams and in VODs on PC, Android and iOS, no Twitch extension required.  
 
+#### Extra: Notas IA en Markdown (fork de Paburusan25)
+
+Además del `.srt`/`.txt`, el plugin puede ir armando **en tiempo real un archivo `.md`** donde una IA organiza lo que se dice en la reunión por:
+
+- **Unidad de competencia** → criterios de desempeño → resultados de aprendizaje → criterios de evaluación
+- **Sin clasificar** para lo que todavía no encaja en ninguna unidad
+
+Cómo usarlo:
+
+1. Abre el dock **Notas IA (Markdown)** (`View → Docks`).
+2. Despliega *Ajustes de la IA* y completa: URL del servicio (cualquier API compatible con OpenAI: `.../v1`, incluidos servicios gratuitos o un Ollama local), clave de API, modelo y carpeta de salida.
+3. Pulsa **Iniciar notas IA**. Cada N segundos (por defecto 20) el texto reconocido nuevo se manda a la IA, que devuelve el documento completo reorganizado. Se ve en vivo en el dock y se guarda en `reunion_notas_<fecha>.md`.
+4. El editor del dock **es editable**: si corriges algo a mano, la IA continúa desde tu versión (si editas mientras la IA trabaja, su respuesta se descarta y se reintenta con tu texto).
+5. **Detener y guardar** procesa lo pendiente y cierra el archivo.
+
+Seguridad y límites:
+
+- Solo se usan subtítulos finales (no los provisionales) y solo mientras las notas están iniciadas.
+- Si la IA falla o responde algo incompleto, **no se pierde texto**: se reintenta y, al detener, queda en la sección *Sin clasificar*. Una respuesta que encoge el documento más de un 20 % se descarta.
+- El texto de la reunión se envía al servicio de IA que configures. La clave de API se guarda en texto plano en la configuración de usuario (QSettings).
+- En reuniones muy largas el documento completo viaja en cada llamada; sube el intervalo o usa un modelo con contexto amplio.
+- El prompt por defecto está en `MarkdownNotesEngine::defaultSystemPrompt()`.
+
+Pruebas del motor (sin OBS ni internet, usa un servidor falso): `tests/run_notes_tests.sh`
+
 #### Features:
   * Completely optional for viewers
   * Captions only when the microphone source is unmuted and active to ensure safety
